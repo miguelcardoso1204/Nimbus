@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const MOCK_DATA = {
-  stationName: "Your Station",
-  temperature: 21.5,
+  stationName: "Porto, Portugal",
+  temperature: 18,
   description: "Partly cloudy",
-  feelsLike: 20.8,
+  feelsLike: 15.3,
   humidity: 66,
   windSpeed: 14.6,
 };
@@ -14,65 +15,168 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Station header */}
-      <Text style={styles.stationLabel}>Weather Station</Text>
-      <Text style={styles.stationName}>{d.stationName}</Text>
+      {/* Station Header with edit button */}
+      <View style={styles.stationHeader}>
+        <View>
+          <Text style={styles.stationLabel}>Weather Station</Text>
+          <View style={styles.stationNameRow}>
+            <Text style={styles.stationName}>{d.stationName}</Text>
+            <Ionicons name="create-outline" size={20} color="#4F46E5" style={{ marginLeft: 8 }} />
+          </View>
+        </View>
+      </View>
 
-      {/* Main temperature */}
-      <View style={styles.currentBlock}>
-        <Text style={styles.currentTemp}>{d.temperature.toFixed(1)}°C</Text>
+      {/* Main Weather Card */}
+      <View style={styles.mainCard}>
+        <Text style={styles.currentTemp}>{d.temperature}°C</Text>
         <Text style={styles.currentDesc}>{d.description}</Text>
+
+        {/* Weather Details Row */}
+        <View style={styles.detailsRow}>
+          <View style={styles.detailItem}>
+            <Ionicons name="thermometer-outline" size={24} color="#64748B" />
+            <View style={styles.detailTextContainer}>
+              <Text style={styles.detailLabel}>Feels Like</Text>
+              <Text style={styles.detailValue}>{d.feelsLike}°C</Text>
+            </View>
+          </View>
+
+          <View style={styles.detailItem}>
+            <Ionicons name="water-outline" size={24} color="#64748B" />
+            <View style={styles.detailTextContainer}>
+              <Text style={styles.detailLabel}>Humidity</Text>
+              <Text style={styles.detailValue}>{d.humidity}%</Text>
+            </View>
+          </View>
+
+          <View style={styles.detailItem}>
+            <Ionicons name="flag-outline" size={24} color="#64748B" />
+            <View style={styles.detailTextContainer}>
+              <Text style={styles.detailLabel}>Wind</Text>
+              <Text style={styles.detailValue}>{d.windSpeed} km/h</Text>
+            </View>
+          </View>
+        </View>
       </View>
 
-      {/* Extra info row */}
-      <View style={styles.row}>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoLabel}>Feels like</Text>
-          <Text style={styles.infoValue}>{d.feelsLike.toFixed(1)}°C</Text>
-        </View>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoLabel}>Humidity</Text>
-          <Text style={styles.infoValue}>{d.humidity}%</Text>
-        </View>
-        <View style={styles.infoCard}>
-          <Text style={styles.infoLabel}>Wind</Text>
-          <Text style={styles.infoValue}>{d.windSpeed} km/h</Text>
+      {/* Quick Actions or Recent Trend */}
+      <View style={styles.trendCard}>
+        <Text style={styles.trendTitle}>24-Hour Trend</Text>
+        <View style={styles.trendPlaceholder}>
+          <Ionicons name="trending-up" size={32} color="#94A3B8" />
+          <Text style={styles.trendText}>Chart visualization coming soon</Text>
         </View>
       </View>
 
-      {/* Placeholder for chart */}
-      <View style={styles.chartPlaceholder}>
-        <Text style={styles.chartText}>Mini temperature chart (later)</Text>
-      </View>
+      {/* Last Updated */}
+      <Text style={styles.lastUpdated}>Last updated: 2 minutes ago</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, backgroundColor: "#f3f6ff" },
-  stationLabel: { fontSize: 14, opacity: 0.7 },
-  stationName: { fontSize: 22, fontWeight: "600", marginBottom: 24 },
-  currentBlock: { marginBottom: 24 },
-  currentTemp: { fontSize: 56, fontWeight: "700" },
-  currentDesc: { fontSize: 18, opacity: 0.7 },
-  row: { flexDirection: "row", gap: 12 },
-  infoCard: {
+  container: {
     flex: 1,
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: "white",
+    backgroundColor: "#F8FAFC",
+    padding: 20,
+  },
+  stationHeader: {
+    marginBottom: 24,
+  },
+  stationLabel: {
+    fontSize: 13,
+    color: "#64748B",
+    fontWeight: "500",
+    marginBottom: 4,
+  },
+  stationNameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  stationName: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#1E293B",
+  },
+  mainCard: {
+    backgroundColor: "#E0F2FE",
+    borderRadius: 24,
+    padding: 32,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  currentTemp: {
+    fontSize: 72,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginBottom: 8,
+  },
+  currentDesc: {
+    fontSize: 20,
+    color: "#475569",
+    marginBottom: 32,
+    fontWeight: "500",
+  },
+  detailsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  detailItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  detailTextContainer: {
+    marginLeft: 8,
+  },
+  detailLabel: {
+    fontSize: 12,
+    color: "#64748B",
+    fontWeight: "500",
+  },
+  detailValue: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginTop: 2,
+  },
+  trendCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
     elevation: 2,
   },
-  infoLabel: { fontSize: 13, opacity: 0.7 },
-  infoValue: { fontSize: 16, fontWeight: "600", marginTop: 4 },
-  chartPlaceholder: {
-    marginTop: 24,
-    flex: 1,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: "#cbd5f5",
+  trendTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#1E293B",
+    marginBottom: 16,
+  },
+  trendPlaceholder: {
+    height: 120,
+    borderRadius: 12,
+    backgroundColor: "#F1F5F9",
     alignItems: "center",
     justifyContent: "center",
   },
-  chartText: { opacity: 0.5 },
+  trendText: {
+    marginTop: 8,
+    fontSize: 13,
+    color: "#94A3B8",
+  },
+  lastUpdated: {
+    textAlign: "center",
+    fontSize: 12,
+    color: "#94A3B8",
+    fontStyle: "italic",
+  },
 });
