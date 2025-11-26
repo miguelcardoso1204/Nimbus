@@ -1,310 +1,143 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
-  const [units, setUnits] = useState<"metric" | "imperial">("metric");
+  const [metric, setMetric] = useState(true);
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  const [refresh, setRefresh] = useState<"15m" | "1h" | "3h">("1h");
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: 32 }}
-    >
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Settings</Text>
-        <Text style={styles.headerSubtitle}>
-          Customize your weather experience
-        </Text>
-      </View>
-
-      {/* Units Section */}
-      <View style={styles.section}>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 32 }}>
+        <Text style={styles.screenTitle}>Settings</Text>
+        
         <Text style={styles.sectionTitle}>Units</Text>
-        <View style={styles.card}>
-          <View style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Ionicons name="speedometer-outline" size={24} color="#4F46E5" />
-              <View style={styles.settingTextContainer}>
-                <Text style={styles.settingLabel}>Measurement Units</Text>
-                <Text style={styles.settingDescription}>
-                  {units === "metric" ? "Celsius, km/h" : "Fahrenheit, mph"}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.unitsToggle}>
-              <Pressable
-                style={[
-                  styles.unitButton,
-                  units === "metric" && styles.unitButtonActive,
-                ]}
-                onPress={() => setUnits("metric")}
-              >
-                <Text
-                  style={[
-                    styles.unitButtonText,
-                    units === "metric" && styles.unitButtonTextActive,
-                  ]}
-                >
-                  Metric
-                </Text>
-              </Pressable>
-              <Pressable
-                style={[
-                  styles.unitButton,
-                  units === "imperial" && styles.unitButtonActive,
-                ]}
-                onPress={() => setUnits("imperial")}
-              >
-                <Text
-                  style={[
-                    styles.unitButtonText,
-                    units === "imperial" && styles.unitButtonTextActive,
-                  ]}
-                >
-                  Imperial
-                </Text>
-              </Pressable>
-            </View>
-          </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Use metric units</Text>
+          <Switch 
+            value={metric} 
+            onValueChange={setMetric}
+            trackColor={{ false: "#cbd5f5", true: "#818cf8" }}
+            thumbColor={metric ? "#4f46e5" : "#f4f3f4"}
+          />
         </View>
-      </View>
 
-      {/* Notifications Section */}
-      <View style={styles.section}>
         <Text style={styles.sectionTitle}>Notifications</Text>
-        <View style={styles.card}>
-          <View style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Ionicons name="notifications-outline" size={24} color="#4F46E5" />
-              <View style={styles.settingTextContainer}>
-                <Text style={styles.settingLabel}>Push Notifications</Text>
-                <Text style={styles.settingDescription}>
-                  Get weather alerts and updates
-                </Text>
-              </View>
-            </View>
-            <Switch
-              value={notifications}
-              onValueChange={setNotifications}
-              trackColor={{ false: "#E2E8F0", true: "#BAE6FD" }}
-              thumbColor={notifications ? "#0EA5E9" : "#94A3B8"}
-              ios_backgroundColor="#E2E8F0"
-            />
-          </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Enable notifications</Text>
+          <Switch 
+            value={notifications} 
+            onValueChange={setNotifications}
+            trackColor={{ false: "#cbd5f5", true: "#818cf8" }}
+            thumbColor={notifications ? "#4f46e5" : "#f4f3f4"}
+          />
         </View>
-      </View>
 
-      {/* Appearance Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Appearance</Text>
-        <View style={styles.card}>
-          <View style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Ionicons
-                name={darkMode ? "moon" : "sunny-outline"}
-                size={24}
-                color="#4F46E5"
-              />
-              <View style={styles.settingTextContainer}>
-                <Text style={styles.settingLabel}>Dark Mode</Text>
-                <Text style={styles.settingDescription}>
-                  Switch to dark theme
-                </Text>
-              </View>
-            </View>
-            <Switch
-              value={darkMode}
-              onValueChange={setDarkMode}
-              trackColor={{ false: "#E2E8F0", true: "#BAE6FD" }}
-              thumbColor={darkMode ? "#0EA5E9" : "#94A3B8"}
-              ios_backgroundColor="#E2E8F0"
-            />
-          </View>
+        <Text style={styles.sectionTitle}>Theme</Text>
+        <View style={styles.row}>
+          <Text style={styles.label}>Dark mode</Text>
+          <Switch 
+            value={darkMode} 
+            onValueChange={setDarkMode}
+            trackColor={{ false: "#cbd5f5", true: "#818cf8" }}
+            thumbColor={darkMode ? "#4f46e5" : "#f4f3f4"}
+          />
         </View>
-      </View>
 
-      {/* Data & Storage Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Data & Storage</Text>
-        <View style={styles.card}>
-          <Pressable style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Ionicons name="cloud-download-outline" size={24} color="#4F46E5" />
-              <View style={styles.settingTextContainer}>
-                <Text style={styles.settingLabel}>Cache Data</Text>
-                <Text style={styles.settingDescription}>
-                  12.5 MB stored locally
-                </Text>
-              </View>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
-          </Pressable>
-
-          <View style={styles.divider} />
-
-          <Pressable style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Ionicons name="trash-outline" size={24} color="#EF4444" />
-              <View style={styles.settingTextContainer}>
-                <Text style={[styles.settingLabel, { color: "#EF4444" }]}>
-                  Clear Cache
-                </Text>
-                <Text style={styles.settingDescription}>
-                  Free up storage space
-                </Text>
-              </View>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
-          </Pressable>
+        <Text style={styles.sectionTitle}>Refresh Frequency</Text>
+        <View style={styles.refreshRow}>
+          {(["15m", "1h", "3h"] as const).map((opt) => (
+            <Pressable
+              key={opt}
+              style={({ pressed }) => [
+                styles.refreshChip,
+                refresh === opt && styles.refreshChipActive,
+                pressed && styles.refreshChipPressed,
+              ]}
+              onPress={() => setRefresh(opt)}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Text
+                style={[
+                  styles.refreshText,
+                  refresh === opt && styles.refreshTextActive,
+                ]}
+              >
+                {opt}
+              </Text>
+            </Pressable>
+          ))}
         </View>
-      </View>
-
-      {/* About Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>About</Text>
-        <View style={styles.card}>
-          <Pressable style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Ionicons name="information-circle-outline" size={24} color="#4F46E5" />
-              <View style={styles.settingTextContainer}>
-                <Text style={styles.settingLabel}>App Version</Text>
-                <Text style={styles.settingDescription}>1.0.0</Text>
-              </View>
-            </View>
-          </Pressable>
-
-          <View style={styles.divider} />
-
-          <Pressable style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Ionicons name="document-text-outline" size={24} color="#4F46E5" />
-              <View style={styles.settingTextContainer}>
-                <Text style={styles.settingLabel}>Privacy Policy</Text>
-              </View>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
-          </Pressable>
-
-          <View style={styles.divider} />
-
-          <Pressable style={styles.settingRow}>
-            <View style={styles.settingLeft}>
-              <Ionicons name="help-circle-outline" size={24} color="#4F46E5" />
-              <View style={styles.settingTextContainer}>
-                <Text style={styles.settingLabel}>Help & Support</Text>
-              </View>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#94A3B8" />
-          </Pressable>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: "#f3f6ff",
   },
-  header: {
-    padding: 20,
+  container: { 
+    flex: 1, 
+    paddingHorizontal: 24, 
     paddingTop: 8,
-    paddingBottom: 24,
   },
-  headerTitle: {
-    fontSize: 32,
+  screenTitle: {
+    fontSize: 28,
     fontWeight: "700",
-    color: "#0F172A",
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 15,
-    color: "#64748B",
-  },
-  section: {
-    marginBottom: 24,
-    paddingHorizontal: 20,
+    marginBottom: 8,
+    color: "#1f2937",
   },
   sectionTitle: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#64748B",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
+    marginTop: 24,
     marginBottom: 12,
-  },
-  card: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  settingRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-    minHeight: 72,
-  },
-  settingLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  settingTextContainer: {
-    marginLeft: 16,
-    flex: 1,
-  },
-  settingLabel: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#0F172A",
-    marginBottom: 2,
+    color: "#374151",
   },
-  settingDescription: {
-    fontSize: 13,
-    color: "#64748B",
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "#F1F5F9",
-    marginLeft: 56,
-  },
-  unitsToggle: {
+  row: {
+    paddingVertical: 12,
     flexDirection: "row",
-    backgroundColor: "#F1F5F9",
-    borderRadius: 8,
-    padding: 2,
-  },
-  unitButton: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "white",
     paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
-  },
-  unitButtonActive: {
-    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 1,
   },
-  unitButtonText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#64748B",
+  label: { fontSize: 15, color: "#1f2937" },
+  refreshRow: { flexDirection: "row", gap: 10, marginTop: 4 },
+  refreshChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: "#cbd5f5",
+    backgroundColor: "white",
+    minWidth: 56,
+    alignItems: "center",
   },
-  unitButtonTextActive: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#0F172A",
+  refreshChipActive: {
+    backgroundColor: "#4f46e5",
+    borderColor: "#4f46e5",
   },
+  refreshChipPressed: {
+    opacity: 0.7,
+  },
+  refreshText: { fontSize: 14, color: "#4b5563" },
+  refreshTextActive: { color: "white", fontWeight: "600" },
 });
